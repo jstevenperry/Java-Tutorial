@@ -1,17 +1,23 @@
 package com.makotojava.intro;
 
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 public class Person {
-
-  public static final String GENDER_MALE = "MALE";
-  public static final String GENDER_FEMALE = "FEMALE";
-
+  
+  public static final String STATE_DELIMITER = "~";
+  
   public Person() {
-    // Nothing to do...
+    // Default constructor
   }
-
-  public Person(String name, int age, int height, int weight, String eyeColor, String gender) {
+  
+  public enum Gender {
+    MALE,
+    FEMALE,
+    UNKNOWN
+  }
+  
+  public Person(String name, int age, int height, int weight, String eyeColor, Gender gender) {
     this.name = name;
     this.age = age;
     this.height = height;
@@ -20,57 +26,12 @@ public class Person {
     this.gender = gender;
   }
 
-  public void printAudit(StringBuilder buffer) {
-    buffer.append("Name=");
-    buffer.append(getName());
-    buffer.append(",");
-    buffer.append("Age=");
-    buffer.append(getAge());
-    buffer.append(",");
-    buffer.append("Height=");
-    buffer.append(getHeight());
-    buffer.append(",");
-    buffer.append("Weight=");
-    buffer.append(getWeight());
-    buffer.append(",");
-    buffer.append("EyeColor=");
-    buffer.append(getEyeColor());
-    buffer.append(",");
-    buffer.append("Gender=");
-    buffer.append(getGender());
-    // Now log the message. The caller has access to the contents
-    /// we just built, but this method implies the audit will be 
-    /// printed, so let's print it.
-    Logger.getLogger(Person.class.getName()).info(buffer.toString());
-  }
-
-  public void printAudit(Logger l) {
-    StringBuilder sb = new StringBuilder();
-    printAudit(sb);
-    l.info(sb.toString());
-  }
-
   private String name;
   private int age;
   private int height;
   private int weight;
   private String eyeColor;
-  private String gender;
-
-  /**
-   * @param args
-   */
-  public static void main(String[] args) {
-    Person p = new Person("Joe Q Author", 42, 173, 82, "Brown", GENDER_MALE);
-    Logger l = Logger.getLogger(Person.class.getName());
-    l.info("Name: " + p.getName());
-    l.info("Age:" + p.getAge());
-    l.info("Height (cm):" + p.getHeight());
-    l.info("Weight (kg):" + p.getWeight());
-    l.info("Eye Color:" + p.getEyeColor());
-    l.info("Gender:" + p.getGender());
-
-  }
+  private Gender gender;
 
   public String getName() {
     return name;
@@ -112,12 +73,27 @@ public class Person {
     this.eyeColor = eyeColor;
   }
 
-  public String getGender() {
+  public Gender getGender() {
     return gender;
   }
 
-  public void setGender(String gender) {
+  public void setGender(Gender gender) {
     this.gender = gender;
+  }
+
+  public void printAudit(StringBuilder buffer) {
+    buffer.append("Name="); buffer.append(getName());
+    buffer.append(","); buffer.append("Age="); buffer.append(getAge());
+    buffer.append(","); buffer.append("Height="); buffer.append(getHeight());
+    buffer.append(","); buffer.append("Weight="); buffer.append(getWeight());
+    buffer.append(","); buffer.append("EyeColor="); buffer.append(getEyeColor());
+    buffer.append(","); buffer.append("Gender="); buffer.append(getGender());
+  }
+  
+  public void printAudit(Logger l) {
+    StringBuilder sb = new StringBuilder();
+    printAudit(sb);
+    l.info(sb.toString());
   }
 
   @Override
@@ -168,8 +144,31 @@ public class Person {
 
   @Override
   public String toString() {
-    return "Person [age=" + age + ", eyeColor=" + eyeColor + ", gender=" + gender + ", height=" + height + ", name="
-        + name + ", weight=" + weight + "]";
+    return "Person [name=" + name + ", age=" + age + ", height=" + height + ", weight=" + weight + ", eyeColor=" + eyeColor
+        + ", gender=" + gender + "]";
+  }
+  
+  public String getState() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(name);sb.append(STATE_DELIMITER);
+    sb.append(age);sb.append(STATE_DELIMITER);
+    sb.append(height);sb.append(STATE_DELIMITER);
+    sb.append(weight);sb.append(STATE_DELIMITER);
+    sb.append(eyeColor);
+    return sb.toString();
+  }
+  
+  public void setState(StringTokenizer strtok) {
+    String name = strtok.nextToken();
+    setName(name);
+    Integer age = Integer.parseInt(strtok.nextToken());
+    setAge(age);
+    Integer height = Integer.parseInt(strtok.nextToken());
+    setHeight(height);
+    Integer weight = Integer.parseInt(strtok.nextToken());
+    setWeight(weight);
+    String eyeColor = strtok.nextToken();
+    setEyeColor(eyeColor);
   }
   
 }

@@ -4,24 +4,29 @@ import java.math.BigDecimal;
 import java.util.logging.Logger;
 
 public class Manager extends Employee implements StockOptionEligible {
-
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -9093910124290970326L;
+  
   private static final Logger log = Logger.getLogger(Manager.class.getName());
-
-  public static void main(String[] args) {
-    StockOptionEligible soe = new Manager();
-    calculateAndAwardStockOptions(soe);
+  
+  public Manager() {
+    super();
   }
 
-  public static void calculateAndAwardStockOptions(StockOptionEligible soe) {
-    BigDecimal reallyCheapPrice = BigDecimal.valueOf(0.01);
-    log.info("Strike price is $" + reallyCheapPrice.toPlainString());
-    int numberOfOptions = 10000;
-    soe.awardStockOptions(numberOfOptions, reallyCheapPrice);
+  public Manager(String name, int age, int height, int weight, String eyeColor, Gender gender, String tin, String employeeNumber,
+      BigDecimal salary) {
+    super(name, age, height, weight, eyeColor, gender, tin, employeeNumber, salary);
+  }
+
+  public Manager(String name, int age, int height, int weight, String eyeColor, Gender gender) {
+    super(name, age, height, weight, eyeColor, gender);
   }
 
   @Override
   public void awardStockOptions(int number, BigDecimal price) {
-    log.info("I can't believe I got " + number + " options at $" + price.toPlainString() + "!");
+    log.info("I can't believe I, " + getName() + ", got " + number + " options at $" + price.toPlainString() + "!");
   }
 
 }
